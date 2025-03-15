@@ -1,5 +1,8 @@
 import scipy.io as sio
-import yaml
+#import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML()
 
 from ._data_reader import get_train_val_test
 from ._sliding_window import down_sample, segment_data_window

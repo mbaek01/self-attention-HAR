@@ -3,7 +3,10 @@ import os
 import h5py
 import numpy as np
 import tensorflow as tf
-import yaml
+#import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML()
 
 from ._data_reader import read_dataset
 from ._sliding_window import segment_pa2, segment_window_all
@@ -11,7 +14,7 @@ from ._sliding_window import segment_pa2, segment_window_all
 
 def get_pamap2_data(verbose=False):
     config_file = open('configs/data.yaml', mode='r')
-    data_config = yaml.load(config_file, Loader=yaml.FullLoader)
+    data_config = yaml.load(config_file)
     config = data_config['pamap2']
 
     train_test_files = {'train': config['train_files'],
@@ -45,6 +48,7 @@ def get_pamap2_data(verbose=False):
         print("x_test shape =", x_test.shape)
         print("y_test shape =", y_test.shape)
 
+    # Sampling?
     x_train = x_train[::3, :]
     y_train = y_train[::3]
     x_val = x_val[::3, :]

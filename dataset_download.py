@@ -6,7 +6,10 @@ import zipfile
 from tqdm import tqdm
 
 import requests
-import yaml
+# import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML()
 
 
 def get_dataset(url: str, data_directory: str, file_name: str, unzip: bool):

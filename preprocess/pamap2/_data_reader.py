@@ -12,15 +12,16 @@ class data_reader:
     def __init__(self, train_test_files, use_columns, output_file_name):
         if not os.path.exists(output_file_name):
             self.data, self.idToLabel = self.readPamap2(train_test_files, use_columns)
+
+            os.makedirs(os.path.dirname(output_file_name), exist_ok=True)
             self.save_data(output_file_name)
 
     def save_data(self, output_file_name):
-        f = h5py.File(output_file_name)
-        for key in self.data:
-            f.create_group(key)
-            for field in self.data[key]:
-                f[key].create_dataset(field, data=self.data[key][field])
-        f.close()
+        with h5py.File(output_file_name, 'w') as f:
+            for key in self.data:
+                grp = f.create_group(key)
+                for field in self.data[key]:
+                    grp.create_dataset(field, data=self.data[key][field])
 
     @property
     def train(self):

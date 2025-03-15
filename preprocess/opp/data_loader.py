@@ -2,7 +2,10 @@ import os
 
 import h5py
 import tensorflow as tf
-import yaml
+# import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML(typ="safe")
 
 from ._data_reader import data_reader
 from ._sliding_window import *
@@ -10,7 +13,7 @@ from ._sliding_window import *
 
 def get_opp_data():
     data_config_file = open('configs/data.yaml', mode='r')
-    data_config = yaml.load(data_config_file, Loader=yaml.FullLoader)
+    data_config = yaml.load(data_config_file)
     config = data_config['opp']
 
     cols = np.array(config['feature_columns']) - 1
@@ -55,7 +58,11 @@ def preprocess(n_sensor_val=77, verbose=False):
     # x_test = np.where(np.isnan(x_test), np.ma.array(x_test, mask=np.isnan(x_test)).mean(axis=0), x_test)
 
     config_file = open('configs/data.yaml', mode='r')
-    config = yaml.load(config_file, Loader=yaml.FullLoader)['opp']
+
+    # correction
+    with open("model_config_file.yaml", "r") as file:
+        config = yaml.load(config_file)['opp']
+
     window_size = config['window_size']
 
     if verbose:

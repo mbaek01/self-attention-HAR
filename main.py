@@ -1,7 +1,10 @@
 import argparse
 import warnings
 
-import yaml
+# import yaml
+from ruamel.yaml import YAML
+
+yaml = YAML()
 
 from utils.data import get_data
 from utils.result import generate_result
@@ -21,7 +24,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model_config_file = open('configs/model.yaml', mode='r')
-    model_cfg = yaml.load(model_config_file, Loader=yaml.FullLoader)
+    model_cfg = yaml.load(model_config_file)
 
     train_x, train_y, val_x, val_y, test_x, test_y = get_data(dataset=args.dataset)
 
