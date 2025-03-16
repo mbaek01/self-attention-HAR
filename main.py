@@ -20,13 +20,15 @@ if __name__ == '__main__':
     parser.add_argument('--test', action='store_true', default=False, help='Testing Mode')
     parser.add_argument('--epochs', default=100, type=int, help='Number of Epochs for Training')
     parser.add_argument('--dataset', default='pamap2', type=str, help='Name of Dataset for Model Training')
+    parser.add_argument('--rotate', default=False, type=bool, help='3D rotation-augmentation of Training Dataset')
+    parser.add_argument('--RANDOM_SEED', default=42, type=int)
 
     args = parser.parse_args()
 
     model_config_file = open('configs/model.yaml', mode='r')
     model_cfg = yaml.load(model_config_file)
 
-    train_x, train_y, val_x, val_y, test_x, test_y = get_data(dataset=args.dataset)
+    train_x, train_y, val_x, val_y, test_x, test_y = get_data(args)
 
     if args.train:
         print('\n[MODEL TRAINING]')

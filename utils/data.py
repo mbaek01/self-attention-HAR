@@ -10,11 +10,12 @@ sys.path.append("../")
 warnings.filterwarnings("ignore")
 
 
-def get_data(dataset: str):
+def get_data(args):
+    dataset = args.dataset
     print(f'[Loading {dataset} data]')
 
     if dataset == 'pamap2':
-        (train_x, train_y), (val_x, val_y), (test_x, test_y), y_test = get_pamap2_data()
+        (train_x, train_y), (val_x, val_y), (test_x, test_y), y_test = get_pamap2_data(args)
 
         return train_x, train_y, val_x, val_y, test_x, test_y
 
