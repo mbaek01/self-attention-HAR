@@ -6,12 +6,12 @@ import tensorflow as tf
 #import yaml
 from ruamel.yaml import YAML
 import random
-import math
 
 yaml = YAML(typ="safe")
 
 from ._data_reader import read_dataset
 from ._sliding_window import segment_pa2, segment_window_all
+from ._rotation import rotate_matrix
 
 
 def get_pamap2_data(args, verbose=False):
@@ -71,7 +71,7 @@ def get_pamap2_data(args, verbose=False):
     x_val = np.where(np.isnan(x_val), np.ma.array(x_val, mask=np.isnan(x_val)).mean(axis=0), x_val)
     x_test = np.where(np.isnan(x_test), np.ma.array(x_test, mask=np.isnan(x_test)).mean(axis=0), x_test)
 
-    # rotation matrix
+    # rotation 
     if args.rotate:
         random.seed(args.RANDOM_SEED)
 
@@ -109,49 +109,3 @@ def get_pamap2_data(args, verbose=False):
         print("test_y shape(1-hot) =", test_y.shape)
 
     return (train_x, train_y), (val_x, val_y), (test_x, test_y), y_test
-
-def rotation_matrix(axis, rad):
-    if axis == 'x':
-        rot_mat = np.aray([
-            [1, 0, 0],
-            [0, np.cos(rad), -np.sin(rad)],
-            [0, np.sin(rad), np.cos(rad)]
-        ])
-    
-    elif axis == 'y':
-        rot_mat = np.array([
-            [np.cos(rad), 0, np.sin(rad)],
-            [0, 1, 0],
-            [-np.sin(rad), 0, np.cos(rad)]
-        ])
-
-    elif axis == 'z':
-        rot_mat = np.array([
-            [np.cos(rad), -np.sin(rad), 0],
-            [np.sin(rad), np.cos(rad), 0],
-            [0, 0, 1]
-        ])
-    
-    else: 
-        raise ValueError("Invalid value: axis should be either x, y, or z")
-
-    return rot_mat
-
-def rotate_matrix(m):
-    # Reshape n x m to n x m/3 x 3
-    num_rows = m.shape[0]
-    reshaped = m.reshape(num_rows, -1, 3)
-
-    # Random Rotation 
-    axes = ['x', 'y', 'z']
-
-    random_axis_idx = random.choice([0, 1, 2])
-    random_rad = random.uniform(0, 2 * math.pi)
-
-    rot_mat = rotation_matrix(axes[random_axis_idx], random_rad)
-    rotated = reshaped @ rot_mat
-
-    # Reshape back 
-    rotated_reshaped = rotated.reshape(num_rows, -1) 
-
-    return rotated_reshaped

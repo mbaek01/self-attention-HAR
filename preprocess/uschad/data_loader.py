@@ -3,12 +3,14 @@ from ruamel.yaml import YAML
 
 yaml = YAML(typ="safe")
 import pandas as pd
+import random
 
 from ._data_reader import read_uschad
 from ._sliding_window import sliding_window
+from ._rotation import rotate_matrix
 
 
-def get_uschad_data(downsample=True, verbose=False):
+def get_uschad_data(args, downsample=True, verbose=False):
     config_file = open('configs/data.yaml', mode='r')
     config = yaml.load(config_file)['uschad']
     window_size = config['window_size']
@@ -44,7 +46,11 @@ def get_uschad_data(downsample=True, verbose=False):
             print("x_test shape(downsampled) =", x_test.shape)
             print("y_test shape(downsampled) =", y_test.shape)
 
-    # TODO: rotation
+    # rotation
+    if args.rotate:
+        random.seed(args.RANDOM_SEED)
+
+        x_train = rotate_matrix(x_train)
 
     train_x, train_y, val_x, val_y, test_x, test_y = sliding_window(
         x_train, y_train, x_validation, y_validation, x_test, y_test, window_size,

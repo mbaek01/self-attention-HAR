@@ -28,4 +28,4 @@ def get_data(args):
         return train_x, train_y, val_x, val_y, test_x, test_y
 
     elif dataset == 'uschad':
-        return get_uschad_data()
+        return get_uschad_data(args)
