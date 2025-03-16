@@ -2,7 +2,7 @@ import scipy.io as sio
 #import yaml
 from ruamel.yaml import YAML
 
-yaml = YAML()
+yaml = YAML(typ="safe")
 
 from ._data_reader import get_train_val_test
 from ._sliding_window import down_sample, segment_data_window
@@ -10,7 +10,7 @@ from ._sliding_window import down_sample, segment_data_window
 
 def get_skoda_data():
     data_config_file = open('configs/data.yaml', mode='r')
-    data_config = yaml.load(data_config_file, Loader=yaml.FullLoader)
+    data_config = yaml.load(data_config_file)
 
     data_dict = sio.loadmat(file_name=data_config['skoda']['data_file'], squeeze_me=True)
     all_data = data_dict[list(data_dict.keys())[3]]

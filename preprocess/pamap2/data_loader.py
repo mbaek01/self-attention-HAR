@@ -8,7 +8,7 @@ from ruamel.yaml import YAML
 import random
 import math
 
-yaml = YAML()
+yaml = YAML(typ="safe")
 
 from ._data_reader import read_dataset
 from ._sliding_window import segment_pa2, segment_window_all

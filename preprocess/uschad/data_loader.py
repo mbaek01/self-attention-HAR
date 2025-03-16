@@ -1,7 +1,7 @@
 #import yaml
 from ruamel.yaml import YAML
 
-yaml = YAML()
+yaml = YAML(typ="safe")
 import pandas as pd
 
 from ._data_reader import read_uschad
@@ -10,7 +10,7 @@ from ._sliding_window import sliding_window
 
 def get_uschad_data(downsample=True, verbose=False):
     config_file = open('configs/data.yaml', mode='r')
-    config = yaml.load(config_file, Loader=yaml.FullLoader)['uschad']
+    config = yaml.load(config_file)['uschad']
     window_size = config['window_size']
 
     df = read_uschad()
@@ -43,6 +43,8 @@ def get_uschad_data(downsample=True, verbose=False):
             print("y_val shape(downsampled) =", y_validation.shape)
             print("x_test shape(downsampled) =", x_test.shape)
             print("y_test shape(downsampled) =", y_test.shape)
+
+    # TODO: rotation
 
     train_x, train_y, val_x, val_y, test_x, test_y = sliding_window(
         x_train, y_train, x_validation, y_validation, x_test, y_test, window_size,

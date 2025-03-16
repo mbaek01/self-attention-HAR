@@ -9,7 +9,7 @@ import requests
 # import yaml
 from ruamel.yaml import YAML
 
-yaml = YAML()
+yaml = YAML(typ="safe")
 
 
 def get_dataset(url: str, data_directory: str, file_name: str, unzip: bool):
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config_file = open('configs/data.yaml', mode='r')
-    config = yaml.load(config_file, Loader=yaml.FullLoader)
+    config = yaml.load(config_file)
 
     get_dataset(url=config[args.dataset]['source'], data_directory=config['data_dir']['raw'],
                 file_name=config[args.dataset]['destination'], unzip=args.unzip)

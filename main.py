@@ -4,7 +4,7 @@ import warnings
 # import yaml
 from ruamel.yaml import YAML
 
-yaml = YAML()
+yaml = YAML(typ="safe")
 
 from utils.data import get_data
 from utils.result import generate_result
